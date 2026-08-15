@@ -1,0 +1,241 @@
+* {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.products {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;  /* Enable horizontal scrolling */
+    scroll-behavior: smooth;  /* Smooth scrolling */
+    gap: 16px;  /* Space between product cards */
+    padding: 20px;
+    justify-content: flex-start;  /* Align items to the start */
+    align-items: center;
+}
+
+.products-grid {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;  /* Align items to the start to ensure first card is visible */
+    gap: 16px;  /* Space between product cards */
+    padding: 20px;
+    padding-left: 40px;  /* Add padding to the left to ensure the first card is not cut off */
+    overflow-x: auto;  /* Enable horizontal scrolling */
+    scroll-behavior: smooth;  /* Smooth scrolling */
+    scroll-snap-type: x mandatory;  /* Snap scrolling horizontally */
+}
+
+.product-card {
+    min-width: 300px;  /* Same size dynamically for all cards */
+    max-width: 300px;  /* Limit max width for uniformity */
+    flex: 0 0 auto;  /* Prevent cards from shrinking or growing */
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.product-card:hover {
+    transform: scale(1.05);  /* Slight zoom effect on hover */
+}
+
+.products::-webkit-scrollbar {
+    height: 8px;
+}
+
+.products::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.product-image img {
+    width: 100%;  /* Ensure images fit the product card */
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+h4 {
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.sale-header {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    margin: 0.3%;
+    margin-top: 1%;
+    padding: 0.5%;
+    display: grid;
+    grid-template-rows: auto;
+    text-shadow: 1px 1px grey, 2px 2px grey;
+    text-align: center;
+}
+
+.sale-header {
+    display: flex;
+    justify-content: center;  /* Center the content horizontally */
+    align-items: center;  /* Vertically align items */
+}
+
+.sale-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;  /* Limit the width of the content */
+}
+
+.logo {
+    max-width: 100px;  /* Control the size of the logo */
+    height: auto;
+}
+
+.title-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;  /* Center the titles horizontally */
+    text-align: center;
+    flex: 1;  /* Allow the middle section to take up the most space */
+}
+
+.established {
+    white-space: nowrap;
+    font-size: 1.2rem;
+}
+
+section>h1 {
+    font-size: 400%;
+}
+
+h1 {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    padding: 0;
+    margin: 0;
+    font-size: 300%;
+    
+}
+
+h2 {
+    font-size: 150%;
+    margin: 10px;
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+section {
+    margin: 10px;
+    margin-bottom: 20px;
+    padding: 20px;
+    text-align: center;
+}
+
+
+.contact {
+    width: 100%;
+    margin-top: 5%;
+    padding: 1.25%;
+    background-color: lightgrey;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+    bottom: 0;
+    position: fixed;
+}
+
+/* Ensure smooth horizontal scrolling and snap behavior */
+.products {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;  /* Align items to the start to ensure first card is visible */
+    gap: 16px;  /* Space between product cards */
+    padding: 20px;
+    padding-left: 40px;  /* Add padding to the left to ensure the first card is not cut off */
+    overflow-x: auto;  /* Enable horizontal scrolling */
+    scroll-behavior: smooth;  /* Smooth scrolling */
+    scroll-snap-type: x mandatory;  /* Snap scrolling horizontally */
+}
+
+/* Each product card should snap into place */
+.product-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;  /* Center content vertically within the card */
+    align-items: center;  /* Center content horizontally */
+    min-width: 300px;  /* Ensure uniform card size */
+    max-width: 300px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    padding: 20px;  /* Padding inside the card */
+    text-align: center;  /* Center text inside the card */
+    scroll-snap-align: start;  /* Snap to the start of the card */
+}
+
+/* Zoom effect on hover */
+.product-card:hover {
+    transform: scale(1.05);  /* Slight zoom on hover */
+}
+
+/* Custom scrollbar styling */
+.products::-webkit-scrollbar {
+    height: 8px;
+}
+
+.products::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+/* Centering the images inside the product cards */
+.product-image {
+    width: 100%;
+    display: flex;
+    justify-content: center;  /* Horizontally center the image */
+    align-items: center;  /* Vertically center the image */
+}
+
+.product-image img {
+    width: 100%;  /* Ensure images fit the product card width */
+    max-height: 200px;  /* Limit the image height */
+    object-fit: contain;  /* Preserve aspect ratio and fit within the container */
+    border-radius: 8px;
+}
+
+/* Styling the product info */
+.product-info {
+    font-size: 1.2rem;
+    margin-top: 10px;
+}
+
+h5 {
+    font-size: 1rem;
+    margin: 5px 0;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 600px) {
+    .products {
+        padding-top: 100px;
+        padding-bottom: 50px;
+    }
+    .product-card {
+        flex: 1 1 100%;  /* Full width of the container */
+        max-width: 100%;  /* Maximum width is 100% of the container */
+        min-width: 300px;  /* Minimum width for very small screens */
+    }
+    
+    .product-info {
+        font-size: 1rem;  /* Adjust content size for smaller screens */
+    }
+    
+    h5 {
+        font-size: 0.9rem;  /* Smaller text for smaller screens */
+    }
+}
