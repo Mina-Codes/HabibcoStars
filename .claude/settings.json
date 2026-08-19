@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --no-sandbox --allow-file-access-from-files --hide-scrollbars --enable-logging=stderr --log-level=0 --window-size=1440,900 --virtual-time-budget=12000 --screenshot=/private/tmp/claude-501/-Users-minamakar-Desktop-Habibco-Stars-HabibcoStars/6bdc9042-c1d7-4478-9786-cedb54bf77ad/scratchpad/verify/cap.png file:///private/tmp/claude-501/-Users-minamakar-Desktop-Habibco-Stars-HabibcoStars/6bdc9042-c1d7-4478-9786-cedb54bf77ad/scratchpad/verify/cap.html)"
+    ]
+  }
+}

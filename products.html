@@ -42,6 +42,7 @@
     html { overflow-x: hidden; }
     body { overflow-x: hidden; }
     body.nav-open { overflow: hidden; }
+    body.lightbox-open { overflow: hidden; }
 
     /* ---- ANNOUNCE ---- */
     .announce {
@@ -244,6 +245,105 @@
     .prod__cta svg { width: 11px; height: 11px; color: var(--gold-700); transition: transform var(--dur-med) var(--ease-out); }
     .prod:hover .prod__cta svg { transform: translateX(4px); }
 
+    /* ---- LIGHTBOX ---- */
+    .prod__img { cursor: zoom-in; }
+    .prod__img:focus-visible {
+      outline: 2px solid var(--gold-700); outline-offset: -2px;
+    }
+    .lightbox {
+      position: fixed; inset: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+      padding: 88px 88px 40px;
+      background: rgba(14,13,11,0.72);
+      backdrop-filter: blur(24px) saturate(0.8);
+      -webkit-backdrop-filter: blur(24px) saturate(0.8);
+      cursor: zoom-out;
+      opacity: 0;
+      transition: opacity var(--dur-med) var(--ease-out);
+    }
+    @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+      .lightbox { background: rgba(14,13,11,0.94); }
+    }
+    .lightbox[hidden] { display: none; }
+    .lightbox.is-open { opacity: 1; }
+
+    .lightbox__stage {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 28px; width: 100%; max-height: 100%;
+      margin: 0; cursor: default;
+      overflow-y: auto; overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
+    .lightbox__img {
+      /* Leave room for the caption; a few products carry very long copy, and the
+         stage scrolls as a fallback rather than clipping the counter. */
+      max-width: min(100%, 1100px);
+      max-height: min(72vh, calc(100vh - 360px));
+      width: auto; height: auto; object-fit: contain; flex-shrink: 0;
+      transform-origin: top left; will-change: transform, opacity;
+      border-radius: var(--r-sm);
+    }
+    .lightbox__caption {
+      text-align: center; width: 100%; max-width: 620px;
+      /* Settles in just behind the image rather than arriving with it. Driven by
+         .is-open alone, so no script path can leave the caption invisible. */
+      opacity: 0;
+      transition: opacity var(--dur-med) var(--ease-out) 140ms;
+    }
+    .lightbox.is-open .lightbox__caption { opacity: 1; }
+    .lightbox__house {
+      font-family: var(--font-sans); font-size: 10px;
+      font-weight: 500; letter-spacing: 0.26em;
+      text-transform: uppercase; color: var(--gold-500); margin-bottom: 8px;
+    }
+    .lightbox__name {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: clamp(24px, 3vw, 32px); line-height: 1.2;
+      letter-spacing: -0.01em; color: var(--ivory-100); margin: 0 0 10px;
+    }
+    .lightbox__desc {
+      font-family: var(--font-sans); font-size: 14px;
+      line-height: 1.6; color: var(--char-300); margin: 0 0 20px;
+    }
+    .lightbox__cta {
+      font-family: var(--font-sans); font-size: 11px;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--ivory-100); font-weight: 500;
+      display: inline-flex; align-items: center; gap: 8px;
+      border-bottom: 1px solid var(--gold-700); padding-bottom: 3px;
+      transition: color var(--dur-fast) var(--ease-out);
+    }
+    .lightbox__cta:hover { color: var(--gold-500); }
+    .lightbox__cta svg { width: 11px; height: 11px; color: var(--gold-700); }
+    .lightbox__count {
+      font-family: var(--font-sans); font-size: 11px;
+      letter-spacing: 0.18em; color: var(--char-400); margin-top: 16px;
+    }
+
+    .lightbox__close, .lightbox__nav {
+      position: absolute; z-index: 2;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: transparent; border: 1px solid var(--line-on-dark);
+      display: grid; place-items: center; color: var(--ivory-200);
+      -webkit-tap-highlight-color: transparent;
+      transition: color var(--dur-fast) var(--ease-out),
+                  border-color var(--dur-fast) var(--ease-out),
+                  background var(--dur-fast) var(--ease-out);
+    }
+    .lightbox__close:hover, .lightbox__nav:hover {
+      color: var(--gold-500); border-color: var(--gold-500);
+      background: rgba(245,235,215,0.06);
+    }
+    .lightbox__close:focus-visible, .lightbox__nav:focus-visible, .lightbox__cta:focus-visible {
+      outline: 2px solid var(--gold-500); outline-offset: 3px;
+    }
+    .lightbox__close { top: 24px; right: 24px; }
+    .lightbox__close svg { width: 18px; height: 18px; }
+    .lightbox__nav { top: 50%; margin-top: -22px; }
+    .lightbox__nav svg { width: 20px; height: 20px; }
+    .lightbox__nav--prev { left: 24px; }
+    .lightbox__nav--next { right: 24px; }
+
     /* ---- FOOTER ---- */
     .footer { background: var(--char-1000); color: var(--ivory-200); padding: 96px 0 0; position: relative; }
     .footer__inner { max-width: 1440px; margin: 0 auto; padding: 0 96px; }
@@ -349,6 +449,15 @@
       .prod-grid--3 { grid-template-columns: 1fr 1fr; }
       .prod__body { padding: 16px 16px 20px; }
       .prod__name { font-size: 17px; }
+      .lightbox { padding: 72px 20px 88px; }
+      .lightbox__stage { gap: 20px; }
+      .lightbox__img { max-height: min(56vh, calc(100vh - 250px)); }
+      .lightbox__desc { font-size: 13px; margin-bottom: 16px; }
+      .lightbox__count { margin-top: 14px; }
+      .lightbox__close { top: 16px; right: 16px; }
+      .lightbox__nav { top: auto; bottom: 20px; margin-top: 0; }
+      .lightbox__nav--prev { left: 20px; }
+      .lightbox__nav--next { right: 20px; }
       .footer { padding-top: 72px; }
       .footer__inner { padding: 0 20px; }
       .footer__top { grid-template-columns: 1fr 1fr; gap: 32px; }
@@ -362,10 +471,18 @@
       .house { padding: 48px 16px 40px; }
       .jump-nav__link { padding: 12px 14px; }
       .prod-grid, .prod-grid--3 { grid-template-columns: 1fr; }
+      .lightbox { padding: 64px 16px 84px; }
+      .lightbox__img { max-height: min(50vh, calc(100vh - 230px)); }
+      .lightbox__name { font-size: 22px; }
+      .lightbox__desc { font-size: 12.5px; }
       .footer__top { grid-template-columns: 1fr; gap: 36px; }
       .footer__tag { font-size: 20px; }
       .footer__bottom { padding: 24px 0 32px; }
       .footer__back { right: 16px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .lightbox__img { transition: none !important; transform: none !important; }
+      .lightbox__caption { transition: none !important; }
     }
   </style>
 </head>
@@ -682,6 +799,37 @@
     <path d="M12 19V5"/><path d="m5 12 7-7 7 7"/>
   </svg>
 </button>
+<!-- Product image viewer -->
+<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-labelledby="lightbox-name">
+  <button type="button" class="lightbox__close" id="lightbox-close" aria-label="Close">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+      <path d="M6 6l12 12M18 6L6 18"/>
+    </svg>
+  </button>
+  <button type="button" class="lightbox__nav lightbox__nav--prev" id="lightbox-prev" aria-label="Previous product">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="m15 5-7 7 7 7"/>
+    </svg>
+  </button>
+  <button type="button" class="lightbox__nav lightbox__nav--next" id="lightbox-next" aria-label="Next product">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="m9 5 7 7-7 7"/>
+    </svg>
+  </button>
+  <figure class="lightbox__stage">
+    <img class="lightbox__img" id="lightbox-img" src="" alt="">
+    <figcaption class="lightbox__caption">
+      <div class="lightbox__house" id="lightbox-house"></div>
+      <h2 class="lightbox__name" id="lightbox-name"></h2>
+      <p class="lightbox__desc" id="lightbox-desc"></p>
+      <a href="#contact" class="lightbox__cta" id="lightbox-cta">Enquire
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+      <div class="lightbox__count" id="lightbox-count"></div>
+    </figcaption>
+  </figure>
+</div>
+
 <script>
 (function(){
   var btn = document.getElementById('back-to-top');
@@ -713,6 +861,237 @@
   window.addEventListener('resize', function () {
     if (window.innerWidth > 820) setOpen(false);
   });
+})();
+</script>
+<script>
+(function () {
+  var overlay  = document.getElementById('lightbox');
+  var imgEl    = document.getElementById('lightbox-img');
+  var houseEl  = document.getElementById('lightbox-house');
+  var nameEl   = document.getElementById('lightbox-name');
+  var descEl   = document.getElementById('lightbox-desc');
+  var countEl  = document.getElementById('lightbox-count');
+  var ctaEl    = document.getElementById('lightbox-cta');
+  var closeBtn = document.getElementById('lightbox-close');
+  var prevBtn  = document.getElementById('lightbox-prev');
+  var nextBtn  = document.getElementById('lightbox-next');
+  var backTop  = document.getElementById('back-to-top');
+  if (!overlay || !imgEl) return;
+
+  var cards = [].slice.call(document.querySelectorAll('.prod'));
+  if (!cards.length) return;
+
+  var DUR = 320;            /* keep in step with --dur-med */
+  var EASE = 'cubic-bezier(0.22,1,0.36,1)';
+  var current = -1, lastFocused = null, token = 0, hideTimer = null;
+
+  function reduceMotion() {
+    return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  /* Painted rect of a thumbnail: the image inside .prod__img is laid out at 100%
+     of the square container with padding and object-fit: contain, so the visible
+     artwork is letterboxed within that box. Measured off the container rather than
+     the <img> because the card's hover rule transforms the <img> by scale(1.05). */
+  function paintedRect(index) {
+    var zone = cards[index].querySelector('.prod__img');
+    var el = thumbOf(index);
+    if (!zone || !el) return null;
+    var r = zone.getBoundingClientRect();
+    var nw = el.naturalWidth, nh = el.naturalHeight;
+    if (!nw || !nh || !r.width || !r.height) return null;
+    var cs = getComputedStyle(el);
+    var pl = parseFloat(cs.paddingLeft), pt = parseFloat(cs.paddingTop);
+    var bw = r.width  - pl - parseFloat(cs.paddingRight);
+    var bh = r.height - pt - parseFloat(cs.paddingBottom);
+    if (bw <= 0 || bh <= 0) return null;
+    var k = Math.min(bw / nw, bh / nh);
+    var w = nw * k, h = nh * k;
+    return {
+      left: r.left + pl + (bw - w) / 2,
+      top:  r.top  + pt + (bh - h) / 2,
+      width: w, height: h
+    };
+  }
+
+  /* Only worth animating back to a card the viewer can actually see. */
+  function inViewport(r) {
+    return r && r.top < window.innerHeight && r.top + r.height > 0;
+  }
+
+  function thumbOf(index) { return cards[index].querySelector('.prod__img img'); }
+
+  function text(card, sel) {
+    var el = card.querySelector(sel);
+    return el ? el.textContent.trim() : '';
+  }
+
+  /* Resolve once the large image is measurable. Thumbnails already load the
+     full-size file, so this is usually a cache hit and returns immediately. */
+  function whenReady(cb) {
+    if (imgEl.complete && imgEl.naturalWidth) { cb(); return; }
+    if (imgEl.decode) { imgEl.decode().then(cb).catch(cb); return; }
+    imgEl.addEventListener('load',  cb, { once: true });
+    imgEl.addEventListener('error', cb, { once: true });
+  }
+
+  /* FLIP: start at the thumbnail's painted rect, transition to the natural one. */
+  function expandFrom(from) {
+    var to = imgEl.getBoundingClientRect();
+    if (!from || !to.width || !to.height || reduceMotion()) {
+      imgEl.getBoundingClientRect();          /* flush the opacity:0 start state */
+      imgEl.style.transition = 'opacity ' + DUR + 'ms ' + EASE;
+      imgEl.style.opacity = '1';
+      return;
+    }
+    imgEl.style.transition = 'none';
+    imgEl.style.opacity = '1';
+    imgEl.style.transform = 'translate(' + (from.left - to.left) + 'px,' + (from.top - to.top) + 'px)' +
+                            ' scale(' + (from.width / to.width) + ',' + (from.height / to.height) + ')';
+    imgEl.getBoundingClientRect();
+    imgEl.style.transition = 'transform ' + DUR + 'ms ' + EASE;
+    imgEl.style.transform = 'none';
+  }
+
+  function render(index, from) {
+    var t = ++token;
+    var card = cards[index];
+    var thumb = thumbOf(index);
+    current = index;
+
+    houseEl.textContent = text(card, '.prod__house');
+    nameEl.textContent  = text(card, '.prod__name');
+    descEl.textContent  = text(card, '.prod__desc');
+    countEl.textContent = (index + 1) + ' / ' + cards.length;
+
+    imgEl.style.transition = 'none';
+    imgEl.style.transform = 'none';
+    imgEl.style.opacity = '0';
+    imgEl.alt = thumb ? (thumb.getAttribute('alt') || '') : '';
+    imgEl.src = thumb ? thumb.getAttribute('src') : '';
+
+    whenReady(function () {
+      if (t !== token) return;
+      expandFrom(from);
+    });
+  }
+
+  function open(index) {
+    var from = paintedRect(index);
+    if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+    lastFocused = document.activeElement;
+    overlay.hidden = false;
+    document.body.classList.add('lightbox-open');
+    if (backTop) backTop.style.display = 'none';
+    render(index, from);
+    overlay.getBoundingClientRect();        /* flush opacity:0 before revealing */
+    overlay.classList.add('is-open');
+    try { closeBtn.focus({ preventScroll: true }); } catch (e) { closeBtn.focus(); }
+  }
+
+  function finishClose() {
+    /* Hand focus to the product the viewer ended on, not the one they opened —
+       it matches where the shrink animation lands, and it is set explicitly
+       because Safari does not focus a tabindex div on click. */
+    var target = (current >= 0 && cards[current].querySelector('.prod__img')) || lastFocused;
+
+    overlay.hidden = true;
+    overlay.classList.remove('is-open');
+    imgEl.style.transition = 'none';
+    imgEl.style.transform = 'none';
+    imgEl.style.opacity = '0';
+    document.body.classList.remove('lightbox-open');
+    if (backTop) backTop.style.display = '';
+
+    if (target && target.focus) {
+      try { target.focus({ preventScroll: true }); } catch (e) { target.focus(); }
+      var r = target.getBoundingClientRect();
+      if (r.top < 0 || r.bottom > window.innerHeight) target.scrollIntoView({ block: 'center' });
+    }
+    lastFocused = null;
+    current = -1;
+  }
+
+  function close(instant) {
+    if (overlay.hidden) return;
+    token++;
+    if (instant || reduceMotion()) { finishClose(); return; }
+
+    /* Shrink back toward the card the viewer landed on. */
+    var to = current >= 0 ? paintedRect(current) : null;
+    var from = imgEl.getBoundingClientRect();
+    if (inViewport(to) && from.width && from.height) {
+      imgEl.style.transition = 'transform ' + DUR + 'ms ' + EASE + ', opacity ' + DUR + 'ms ' + EASE;
+      imgEl.style.transform = 'translate(' + (to.left - from.left) + 'px,' + (to.top - from.top) + 'px)' +
+                              ' scale(' + (to.width / from.width) + ',' + (to.height / from.height) + ')';
+    }
+    overlay.classList.remove('is-open');
+    hideTimer = setTimeout(function () { hideTimer = null; finishClose(); }, DUR);
+  }
+
+  function go(delta) {
+    if (overlay.hidden) return;
+    render((current + delta + cards.length) % cards.length, null);
+  }
+
+  /* --- open triggers: the image area only --- */
+  document.addEventListener('click', function (e) {
+    var zone = e.target.closest && e.target.closest('.prod__img');
+    if (!zone) return;
+    var card = zone.closest('.prod');
+    var index = cards.indexOf(card);
+    if (index < 0) return;
+    e.preventDefault();
+    open(index);
+  });
+
+  cards.forEach(function (card) {
+    var zone = card.querySelector('.prod__img');
+    if (!zone) return;
+    var name = text(card, '.prod__name');
+    zone.setAttribute('tabindex', '0');
+    zone.setAttribute('role', 'button');
+    zone.setAttribute('aria-label', 'View ' + (name || 'product') + ' full screen');
+    zone.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' && e.key !== ' ' && e.key !== 'Spacebar') return;
+      e.preventDefault();
+      var index = cards.indexOf(card);
+      if (index >= 0) open(index);
+    });
+  });
+
+  /* --- controls --- */
+  closeBtn.addEventListener('click', function () { close(); });
+  prevBtn.addEventListener('click', function () { go(-1); });
+  nextBtn.addEventListener('click', function () { go(1); });
+  ctaEl.addEventListener('click', function () { close(true); });
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+
+  document.addEventListener('keydown', function (e) {
+    if (overlay.hidden) return;
+    if (e.key === 'Escape') { e.preventDefault(); close(); return; }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); go(-1); return; }
+    if (e.key === 'ArrowRight') { e.preventDefault(); go(1);  return; }
+    if (e.key !== 'Tab') return;
+    var focusable = [closeBtn, prevBtn, nextBtn, ctaEl];
+    var i = focusable.indexOf(document.activeElement);
+    var next = e.shiftKey
+      ? (i <= 0 ? focusable.length - 1 : i - 1)
+      : (i === focusable.length - 1 || i < 0 ? 0 : i + 1);
+    e.preventDefault();
+    focusable[next].focus();
+  });
+
+  /* --- swipe --- */
+  var tx = 0, ty = 0;
+  overlay.addEventListener('touchstart', function (e) {
+    tx = e.changedTouches[0].clientX; ty = e.changedTouches[0].clientY;
+  }, { passive: true });
+  overlay.addEventListener('touchend', function (e) {
+    var dx = e.changedTouches[0].clientX - tx;
+    var dy = e.changedTouches[0].clientY - ty;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? 1 : -1);
+  }, { passive: true });
 })();
 </script>
 </body>
